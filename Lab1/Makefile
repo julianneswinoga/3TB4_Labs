@@ -50,7 +50,7 @@ flash: $(BIN_DIR)/$(PROJECT).bin
 	ST-LINK_CLI -P $(BIN_DIR)/$(PROJECT).bin 0x08000000
 
 clean:
-	$(RM) $(OBJS) "$(BIN_DIR)/$(PROJECT).elf" "$(BIN_DIR)/$(PROJECT).map"
+	$(RM) $(OBJS) "$(BIN_DIR)/$(PROJECT).elf" "$(BIN_DIR)/$(PROJECT).bin" "$(BIN_DIR)/$(PROJECT).map"
 
 
 ##################

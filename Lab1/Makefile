@@ -57,7 +57,7 @@ clean:
 # Specific targets
 ##################
 $(OBJECT_DIR)/src/main.o: src/main.c
-	@mkdir $(subst /,\,$(dir $@)) || echo off
+	#@mkdir $(subst /,\,$(dir $@)) || echo off
 	$(CC) $(COMPILER_FLAGS) src/main.c -o $(OBJECT_DIR)/src/main.o 
 
 
@@ -65,13 +65,10 @@ $(OBJECT_DIR)/src/main.o: src/main.c
 # Implicit targets
 ##################
 $(OBJECT_DIR)/%.o: %.c
-	@mkdir $(subst /,\,$(dir $@)) || echo off
 	$(CC) $(COMPILER_FLAGS) $< -o $@
 
 $(OBJECT_DIR)/%.o: %.s
-	@mkdir $(subst /,\,$(dir $@)) || echo off
 	$(CC) $(ASSEMBLER_FLAGS) $< -o $@
 	
 $(OBJECT_DIR)/%.o: %.S
-	@mkdir $(subst /,\,$(dir $@)) || echo off
 	$(CC) $(ASSEMBLER_FLAGS) $< -o $@

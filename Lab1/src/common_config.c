@@ -8,7 +8,7 @@
 extern __IO INTURUPT_DATA Inturupt_Data;
 
 void PB_Config(void) {
-	STM_EVAL_PBInit(BUTTON_USER, BUTTON_MODE_EXTI);
+	STM_EVAL_PBInit(BUTTON_USER, BUTTON_MODE_GPIO);
 }
 
 /*

@@ -70,7 +70,7 @@
    sEE_TIMEOUT_UserCallback() function is called whenever a timeout condition 
    occure during communication (waiting on an event that doesn't occur, bus 
    errors, busy devices ...). */   
-// #define USE_DEFAULT_TIMEOUT_CALLBACK
+#define USE_DEFAULT_TIMEOUT_CALLBACK
 
 /* EEPROM hardware address and page size */ 
 #define sEE_HW_ADDRESS         0xA0

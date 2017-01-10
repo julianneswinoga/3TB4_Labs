@@ -7,10 +7,13 @@
 #include "stm32f429i_discovery.h"
 #include "LCDUtils.h"
 #include "common_config.h"
+#include "helpers.h"
 
 #define GROUP_ID 35
-
 #define TA_ID 0x000
+
+#define KEY_PRESSED 0x00
+#define KEY_NOT_PRESSED 0x01
 
 #define USE_CAN1
 

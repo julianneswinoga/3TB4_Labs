@@ -5,6 +5,8 @@
 #include "common_config.h"
 #include "main.h"
 
+extern __IO INTURUPT_DATA Inturupt_Data;
+
 void PB_Config(void) {
 	STM_EVAL_PBInit(BUTTON_USER, BUTTON_MODE_EXTI);
 }
@@ -83,12 +85,13 @@ void GPIO_Config(void) {
 	GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
+/*This function is is used to
+configure GPIO ports including enabling of clock
+Initializing the CAN, initializing the CAN filters, enabling the FIFO pending interrupt
+*/
 void CAN_Config(void) {
-	/*This function is is used to
-		configure  GPIO ports including enabling of clock
-		Initializing the CAN
-		Initializing the CAN filters
-		Enabling the FIFO pending interrupt */
+	CAN_InitTypeDef CAN_InitStructure;
+	CAN_FilterInitTypeDef CAN_FilterInitStructure;
 	// NOTE: No GPIO ports or CAN bus is used for running in the Silent and Loopback mode,
 	// but required for normal operation
 	// The Baudrate of CAN bus used in lab is 500k Bps
@@ -125,21 +128,21 @@ void CAN_Config(void) {
 #else /* USE_CAN2 */
 	CAN_FilterInitStructure.CAN_FilterNumber = 14;
 #endif  /* USE_CAN1 */
-	//  CAN_FilterInitStructure.CAN_FilterMode = ?;
-	//  CAN_FilterInitStructure.CAN_FilterScale = ?;
-	//	CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;
-	//	CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
-	//  CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;
-	//  CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
+	// CAN_FilterInitStructure.CAN_FilterMode = ?;
+	// CAN_FilterInitStructure.CAN_FilterScale = ?;
+	// CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;
+	// CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
+	// CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;
+	// CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
 	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
 	CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
 	CAN_FilterInit(&CAN_FilterInitStructure);
 	/* Transmit Structure preparation */
-	TxMessage.StdId = GROUP_ID;
-	TxMessage.ExtId = 0x00;
-	TxMessage.RTR = CAN_RTR_DATA;
-	TxMessage.IDE = CAN_ID_STD;
-	TxMessage.DLC = 1;
-	TxMessage.Data[0] = (GROUP_ID & 0x0FF); //group id
+	Inturupt_Data.TxMessage.StdId = GROUP_ID;
+	Inturupt_Data.TxMessage.ExtId = 0x00;
+	Inturupt_Data.TxMessage.RTR = CAN_RTR_DATA;
+	Inturupt_Data.TxMessage.IDE = CAN_ID_STD;
+	Inturupt_Data.TxMessage.DLC = 1;
+	Inturupt_Data.TxMessage.Data[0] = (GROUP_ID & 0x0FF); //group id
 	/* Enable FIFO 0 message pending Interrupt */
 }

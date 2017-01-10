@@ -19,5 +19,6 @@ void Button_Inturupt_Config(uint8_t, uint8_t, uint32_t, EXTITrigger_TypeDef, IRQ
 void ADC_Config(void);
 void PWM_Config(void);
 void TIM4_Config(void);
+void CAN_Config(void);
 
 #endif /* __COMMON_CONFIG_H */

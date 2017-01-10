@@ -5,8 +5,6 @@ __IO INTURUPT_DATA Inturupt_Data = {
 	.DelayCounter = 0
 };
 
-CAN_InitTypeDef        CAN_InitStructure;
-CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 CanTxMsg TxMessage;
 CanRxMsg RxMessage;
 uint8_t TransmitMailbox = 0;

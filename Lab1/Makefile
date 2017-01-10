@@ -54,6 +54,7 @@ clean:
 
 style: astylerc
 	astyle --options=astylerc $(wildcard src/*.c)
+	astyle --options=astylerc $(wildcard src/*.h)
 
 ##################
 # Specific targets

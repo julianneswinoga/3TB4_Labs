@@ -18,19 +18,15 @@ void PID_Setup(double *setpoint, double *input, double *output, double Kp, doubl
 	PID_Structure.err = 0;
 	PID_Structure.errSum = 0;
 	PID_Structure.inputLast = 0;
-	
 	PID_Structure.outputReverse = (reverse ? -1 : 1);
 }
 
 void PID_Update() {
 	PID_Structure.err = *PID_Structure.setpoint - *PID_Structure.input;
 	PID_Structure.errSum += PID_Structure.err;
-	
-	
 	double P = PID_Structure.outputReverse * PID_Structure.Kp * (PID_Structure.err);
 	double I = PID_Structure.outputReverse * PID_Structure.Ki * (PID_Structure.errSum);
 	double D = PID_Structure.outputReverse * PID_Structure.Kd * (*PID_Structure.input - PID_Structure.inputLast);
-	
 	*PID_Structure.output = (P + I + D);
 	PID_Structure.inputLast = *PID_Structure.input;
 }
@@ -41,7 +37,7 @@ void PID_Update() {
 int Rand_Int(int LOW, int HIGH) {
 	while (RNG_GetFlagStatus(RNG_FLAG_DRDY) == RESET)
 		;
-	
+
 	return map(RNG_GetRandomNumber(), 0, UINT32_MAX, LOW, HIGH);
 }
 
@@ -68,8 +64,10 @@ float map(float input, float in_min, float in_max, float out_min, float out_max)
 */
 void WaitForUserButton(void) {
 	Inturupt_Data.UBPressed = false;
+
 	while (!Inturupt_Data.UBPressed)
 		;
+
 	Inturupt_Data.UBPressed = false;
 }
 
@@ -80,8 +78,10 @@ void WaitForUserButton(void) {
 double saturate(double input, double lower_bound, double upper_bound) {
 	if (input < lower_bound)
 		return lower_bound;
+
 	else if (input > upper_bound)
 		return upper_bound;
+
 	return input;
 }
 
@@ -90,9 +90,7 @@ double saturate(double input, double lower_bound, double upper_bound) {
 */
 void setPWMDuty(float duty) {
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
-	
-	uint16_t CCR1_Val = 699*duty;
-	
+	uint16_t CCR1_Val = 699 * duty;
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = CCR1_Val;

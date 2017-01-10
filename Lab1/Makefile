@@ -52,6 +52,8 @@ flash: $(BIN_DIR)/$(PROJECT).bin
 clean:
 	$(RM) $(OBJS) "$(BIN_DIR)/$(PROJECT).elf" "$(BIN_DIR)/$(PROJECT).bin" "$(BIN_DIR)/$(PROJECT).map"
 
+style: astylerc
+	astyle --options=astylerc $(wildcard src/*.c)
 
 ##################
 # Specific targets

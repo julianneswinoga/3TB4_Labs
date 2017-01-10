@@ -13,30 +13,30 @@ void LCD_Config() {
 	LTDC_Cmd(ENABLE); // Enable the LTDC
 	LCD_SetLayer(LCD_FOREGROUND_LAYER); // Set LCD foreground layer
 	LCD_SetFont(&Font12x12); // Set the font
-	
 	LCD_Clear(LCD_COLOR_WHITE); // Clear the screen
 }
 
 /*
 * Method to catch special characters and enchance LCD screen usability
 */
-void LCD_DisplayLines(uint16_t LineNumber, uint16_t ColumnNumber, uint8_t *ptr) {	
+void LCD_DisplayLines(uint16_t LineNumber, uint16_t ColumnNumber, uint8_t *ptr) {
 	uint8_t lines[10][32] = {' '}; // Initialize some chars to store the lines
 	int lineCount = 0, charCount = 0; // Variables to store position within the input string
-	
-	for(int i = 0;ptr[i] != NULL;i++) { // Loop through the input string
+
+	for (int i = 0; ptr[i] != NULL; i++) { // Loop through the input string
 		if (ptr[i] == '\n') { // Check for a newline
 			lines[lineCount][charCount] = NULL; // End the output string
 			lineCount++; // Advance down a line
 			charCount = 0;
+
 		} else {
 			lines[lineCount][charCount] = ptr[i]; // Copy over the input character to the current output line
 			charCount++;
 		}
 	}
-	
-	for(int i = 0;i <= lineCount;i++) // Loop through the lines
-		LCD_DisplayString(LineNumber+i, ColumnNumber, (uint8_t *)lines[i]); // Display the lines one after another
+
+	for (int i = 0; i <= lineCount; i++) // Loop through the lines
+		LCD_DisplayString(LineNumber + i, ColumnNumber, (uint8_t *)lines[i]); // Display the lines one after another
 }
 
 /*

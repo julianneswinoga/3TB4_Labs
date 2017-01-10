@@ -1,0 +1,15 @@
+style=java
+indent=tab=4
+attach-inlines
+indent-classes
+indent-cases
+indent-namespaces
+indent-labels
+indent-preproc-block
+indent-preproc-define
+indent-col1-comments
+break-blocks=all
+pad-oper
+pad-header
+delete-empty-lines
+keep-one-line-blocks

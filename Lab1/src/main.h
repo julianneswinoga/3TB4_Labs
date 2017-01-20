@@ -40,9 +40,9 @@
 #endif /* USE_CAN1 */
 
 typedef struct {
-  __IO bool UBPressed;	// User button
-  __IO uint32_t DelayCounter; // Counter for measuring delayed time
-  __IO CanTxMsg TxMessage;    // CAN Tx Message
+	__IO bool UBPressed;		// User button
+	__IO uint32_t DelayCounter; // Counter for measuring delayed time
+	__IO CanTxMsg TxMessage;	// CAN Tx Message
 } INTURUPT_DATA;
 
 #endif /* __MAIN_H */

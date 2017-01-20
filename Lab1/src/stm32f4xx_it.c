@@ -12,22 +12,22 @@ void NMI_Handler(void) {}
 
 // Unused
 void HardFault_Handler(void) {
-  while (1) {}
+	while (1) {}
 }
 
 // Unused
 void MemManage_Handler(void) {
-  while (1) {}
+	while (1) {}
 }
 
 // Unused
 void BusFault_Handler(void) {
-  while (1) {}
+	while (1) {}
 }
 
 // Unused
 void UsageFault_Handler(void) {
-  while (1) {}
+	while (1) {}
 }
 
 // Unused

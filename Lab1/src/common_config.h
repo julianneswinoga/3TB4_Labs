@@ -16,7 +16,7 @@ void RNG_Config(void);
 void Delay_Config(void);
 void GPIO_Config(void);
 void Button_Inturupt_Config(uint8_t, uint8_t, uint32_t, EXTITrigger_TypeDef,
-			    IRQn_Type);
+							IRQn_Type);
 void ADC_Config(void);
 void PWM_Config(void);
 void TIM4_Config(void);

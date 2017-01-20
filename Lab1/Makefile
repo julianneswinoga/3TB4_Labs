@@ -55,6 +55,7 @@ clean:
 style:
 	clang-format -i -style=file $(wildcard src/*.c)
 	clang-format -i -style=file $(wildcard src/*.h)
+	rm $(wildcard src/*.orig) $(wildcard src/*.TMP)
 
 ##################
 # Specific targets

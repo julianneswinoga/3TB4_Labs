@@ -52,9 +52,9 @@ flash: $(BIN_DIR)/$(PROJECT).bin
 clean:
 	$(RM) $(OBJS) "$(BIN_DIR)/$(PROJECT).elf" "$(BIN_DIR)/$(PROJECT).bin" "$(BIN_DIR)/$(PROJECT).map"
 
-style: astylerc
-	astyle --options=astylerc $(wildcard src/*.c)
-	astyle --options=astylerc $(wildcard src/*.h)
+style:
+	clang-format -i -style=file $(wildcard src/*.c)
+	clang-format -i -style=file $(wildcard src/*.h)
 
 ##################
 # Specific targets

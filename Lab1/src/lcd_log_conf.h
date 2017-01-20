@@ -8,7 +8,8 @@
   *          This file should be copied to the application folder and modified
   *          as follows:
   *            - Rename it to 'lcd_log_conf.h'.
-  *            - Update the name of the LCD header file depending on the EVAL board
+  *            - Update the name of the LCD header file depending on the EVAL
+  *board
   *              you are using (see line32 below).
   ******************************************************************************
   * @attention
@@ -31,12 +32,12 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef  __LCD_LOG_CONF_H__
-#define  __LCD_LOG_CONF_H__
+#ifndef __LCD_LOG_CONF_H__
+#define __LCD_LOG_CONF_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f429i_discovery_lcd.h"
 #include "stm32_eval_legacy.h"
+#include "stm32f429i_discovery_lcd.h"
 #include <stdio.h>
 
 /** @addtogroup LCD_LOG
@@ -48,7 +49,6 @@
   * @{
   */
 
-
 /** @defgroup LCD_LOG_CONF_Exported_Defines
   * @{
   */
@@ -56,15 +56,15 @@
 #define LCD_SCROLL_ENABLED
 
 /* Define the LCD default text color */
-#define LCD_LOG_DEFAULT_COLOR    LCD_COLOR_WHITE
+#define LCD_LOG_DEFAULT_COLOR LCD_COLOR_WHITE
 
 /* Define the display window settings */
-#define YWINDOW_MIN              3
-#define YWINDOW_SIZE             12
-#define XWINDOW_MAX              50
+#define YWINDOW_MIN 3
+#define YWINDOW_SIZE 12
+#define XWINDOW_MAX 50
 
 /* Define the cache depth */
-#define CACHE_SIZE               50
+#define CACHE_SIZE 50
 
 /** @defgroup LCD_LOG_CONF_Exported_TypesDefinitions
   * @{
@@ -74,11 +74,9 @@
   * @}
   */
 
-
 /** @defgroup LCD_LOG_Exported_Macros
   * @{
   */
-
 
 /**
   * @}
@@ -99,7 +97,6 @@
 /**
   * @}
   */
-
 
 #endif /* __LCD_LOG_H__ */
 

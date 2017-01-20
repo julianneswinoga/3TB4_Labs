@@ -42,7 +42,9 @@ void PendSV_Handler(void) {}
 /*
 * Because of Delay_Config(), SysTick now executes every 1ms
 */
-void SysTick_Handler(void) {}
+void SysTick_Handler(void) {
+	Inturupt_Data.DelayCounter--;
+}
 
 /*
 * TIM3 inturupt

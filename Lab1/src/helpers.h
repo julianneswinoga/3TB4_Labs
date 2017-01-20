@@ -23,11 +23,12 @@ typedef struct {
 void PID_Setup(double *, double *, double *, double, double, double, bool);
 void PID_Update(void);
 void Delay(__IO uint32_t time);
-int	Rand_Int(int, int);
-float  map(float, float, float, float, float);
-void   WaitForUserButton(void);
-double saturate(double, double, double);
-void   setPWMDuty(float);
-double getTemperature(void);
+int		Rand_Int(int, int);
+float   map(float, float, float, float, float);
+void	WaitForUserButton(void);
+double  saturate(double, double, double);
+void	setPWMDuty(float);
+double  getTemperature(void);
+uint8_t Can_Receive_Msg(uint8_t *);
 
 #endif /* __HELPERS_H */

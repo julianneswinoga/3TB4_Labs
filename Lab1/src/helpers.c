@@ -102,3 +102,33 @@ void setPWMDuty(float duty) {
 	TIM_OCInitStructure.TIM_OCPolarity  = TIM_OCPolarity_High;
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 }
+
+uint8_t Can_Send_Msg(uint8_t *msg, u8 len) {
+	uint8_t  mbox;
+	uint16_t i = 0;
+	CanTxMsg TxMessage;
+	TxMessage.StdId = 0x12; // Standard identifier is 0
+	TxMessage.ExtId = 0x12; // Setting the extension identifier (29 bits)
+	TxMessage.IDE   = 0;	// Using an extended identifier
+	TxMessage.RTR   = 0; // Message types for the data frame, 8 bits in a frame
+	TxMessage.DLC   = len; // Two frames of information transmission
+	for (i				  = 0; i < len; i++)
+		TxMessage.Data[i] = msg[i]; // The first frame information
+	mbox				  = CAN_Transmit(CAN1, &TxMessage);
+	i					  = 0;
+	while ((CAN_TransmitStatus(CAN1, mbox) == CAN_TxStatus_Failed) &&
+		   (i < 0XFFF))
+		i++; // Waiting for the end of transmission
+	if (i >= 0XFFF) return 1;
+	return 0;
+}
+
+uint8_t Can_Receive_Msg(uint8_t *buf) {
+	uint32_t i;
+	CanRxMsg RxMessage;
+	if (CAN_MessagePending(CAN1, CAN_FIFO0) == 0)
+		return 0; // No data received, directly from the
+	CAN_Receive(CAN1, CAN_FIFO0, &RxMessage); // Read data
+	for (i = 0; i < 8; i++) buf[i] = RxMessage.Data[i];
+	return RxMessage.DLC;
+}

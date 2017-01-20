@@ -29,7 +29,7 @@ void TIM3_Config(uint32_t PERIOD, uint16_t PRESCALER) {
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 	// Enable TIM3 global interrupt
 	NVIC_InitStructure.NVIC_IRQChannel					 = TIM3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0X00;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority		 = 0x01;
 	NVIC_InitStructure.NVIC_IRQChannelCmd				 = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);

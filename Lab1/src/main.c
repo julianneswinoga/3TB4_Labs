@@ -54,9 +54,3 @@ int main(void) {
 		}
 	}
 }
-
-// I2C error callback
-/*void sEE_TIMEOUT_UserCallback() {
-	while (1)
-		;
-}*/

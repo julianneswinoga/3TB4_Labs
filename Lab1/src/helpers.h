@@ -29,6 +29,7 @@ void	WaitForUserButton(void);
 double  saturate(double, double, double);
 void	setPWMDuty(float);
 double  getTemperature(void);
+uint8_t Can_Send_Msg(uint8_t *, uint8_t);
 uint8_t Can_Receive_Msg(uint8_t *);
 
 #endif /* __HELPERS_H */

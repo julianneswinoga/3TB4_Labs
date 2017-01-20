@@ -4,6 +4,7 @@ __IO INTURUPT_DATA Inturupt_Data = {.UBPressed = false, .DelayCounter = 0};
 
 uint8_t TransmitMailbox = 0;
 char	msg[255];
+uint8_t CAN_buf[8];
 
 int main(void) {
 	Delay_Config(); // Set SysTick timer
@@ -17,10 +18,13 @@ int main(void) {
 	while (1) {
 		while (STM_EVAL_PBGetState(BUTTON_USER) !=
 			   KEY_PRESSED) { // If user button pressed
-			TransmitMailbox = CAN_Transmit(
-				CANx, &Inturupt_Data.TxMessage); // Transmit message
+			// TransmitMailbox = CAN_Transmit(
+			//	CANx, &Inturupt_Data.TxMessage); // Transmit message
 			STM_EVAL_LEDOff(LED3); // LED off indicates message sent
-			sprintf(msg, "DataTx: %i", Inturupt_Data.TxMessage.Data[0]);
+			CAN_buf[0] = 5;
+			Can_Send_Msg(CAN_buf, 8);
+
+			sprintf(msg, "DataTx: %i", CAN_buf[0]);
 			LCD_DisplayLines(
 				1, 1,
 				(uint8_t *)msg); // Display the transmitted message data
@@ -43,18 +47,12 @@ int main(void) {
 
 			Delay(1500);
 
-			if (CAN_GetFlagStatus(CANx, CAN_FLAG_FMP0) !=
-				RESET) { // Message pending in FIFO0
-				/*CAN_Receive(CANx, CAN_FIFO0, &RxMessage); // Receive the
-				message
-				STM_EVAL_LEDOn(LED4); // LED on indicates message received
-				sprintf(msg, "DataRx: %i", RxMessage.Data[0]);
-				LCD_DisplayLines(5, 1, (uint8_t *)msg); // Display data received
-				CAN_ClearFlag(CANx, CAN_FLAG_FMP0);		// Clear the flag
-				*/
-				Can_Receive_Msg(msg);
-				sprintf(msg, "%i:%i:%i", msg[0], msg[1], msg[2]);
-				LCD_DisplayLines(5, 1, (uint8_t *)msg);
+			if (CAN_GetFlagStatus(CANx, CAN_FLAG_FMP0) != RESET) {
+				if (Can_Receive_Msg(CAN_buf) != 0) {
+					sprintf(msg, "%i:%i:%i", CAN_buf[0], CAN_buf[1],
+							CAN_buf[2]);
+					LCD_DisplayLines(5, 1, (uint8_t *)msg);
+				}
 
 			} else {
 				LCD_DisplayLines(8, 1, (uint8_t *)"No message waiting");

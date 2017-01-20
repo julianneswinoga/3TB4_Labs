@@ -103,7 +103,7 @@ void setPWMDuty(float duty) {
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 }
 
-uint8_t Can_Send_Msg(uint8_t *msg, u8 len) {
+uint8_t Can_Send_Msg(uint8_t *msg, uint8_t len) {
 	uint8_t  mbox;
 	uint16_t i = 0;
 	CanTxMsg TxMessage;

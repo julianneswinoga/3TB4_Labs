@@ -44,20 +44,7 @@ int main(void) {
 				// has been used.
 				LCD_DisplayLines(10, 1, (uint8_t *)"Message cancled!");
 			}
-
-			Delay(1500);
-
-			if (CAN_GetFlagStatus(CANx, CAN_FLAG_FMP0) != RESET) {
-				if (Can_Receive_Msg(CAN_buf) != 0) {
-					sprintf(msg, "%i:%i:%i", CAN_buf[0], CAN_buf[1],
-							CAN_buf[2]);
-					LCD_DisplayLines(5, 1, (uint8_t *)msg);
-				}
-
-			} else {
-				LCD_DisplayLines(8, 1, (uint8_t *)"No message waiting");
-				LCD_DisplayInt(9, 1, CAN_GetFlagStatus(CANx, CAN_FLAG_FMP0));
-			}
 		}
+		LCD_DisplayInt(5, 5, Inturupt_Data.CAN_RxMessage[0]);
 	}
 }

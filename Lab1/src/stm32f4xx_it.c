@@ -43,7 +43,7 @@ void PendSV_Handler(void) {}
 * Because of Delay_Config(), SysTick now executes every 1ms
 */
 void SysTick_Handler(void) {
-	Inturupt_Data.DelayCounter--;
+	if (Inturupt_Data.DelayCounter > 0) Inturupt_Data.DelayCounter--;
 }
 
 /*
@@ -52,3 +52,10 @@ void SysTick_Handler(void) {
 void TIM3_IRQHandler(void) {}
 
 void EXTI0_IRQHandler(void) {}
+
+void CAN1_RX0_IRQHandler(void) {
+	CanRxMsg RxMessage;
+	int		 i = 0;
+	CAN_Receive(CAN1, 0, &RxMessage);
+	for (i = 0; i < 8; i++) Inturupt_Data.CAN_RxMessage[i] = RxMessage.Data[i];
+}

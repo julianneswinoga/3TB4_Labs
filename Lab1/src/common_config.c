@@ -95,6 +95,7 @@ interrupt
 void CAN_Config(void) {
 	CAN_InitTypeDef		  CAN_InitStructure;
 	CAN_FilterInitTypeDef CAN_FilterInitStructure;
+	NVIC_InitTypeDef	  NVIC_InitStructure;
 	// NOTE: No GPIO ports or CAN bus is used for running in the Silent and
 	// Loopback mode,
 	// but required for normal operation
@@ -157,4 +158,14 @@ void CAN_Config(void) {
 	Inturupt_Data.TxMessage.DLC		= 1;
 	Inturupt_Data.TxMessage.Data[0] = (GROUP_ID & 0x0FF); // group id
 	/* Enable FIFO 0 message pending Interrupt */
+
+	CAN_ITConfig(CAN1, CAN_IT_FMP0,
+				 ENABLE); // The FIFO0 message to register interrupt enable
+
+	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority =
+		1;											   // The main priority 1
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0; // Time priority 0
+	NVIC_InitStructure.NVIC_IRQChannelCmd		  = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
 }

@@ -119,8 +119,7 @@ void CAN_Config(void) {
 	CAN_InitStructure.CAN_NART = ENABLE;
 	//  CAN_InitStructure.CAN_RFLM = ?;
 	//  CAN_InitStructure.CAN_TXFP = ?;
-	CAN_InitStructure.CAN_Mode =
-		CAN_Mode_Normal; // Modify for normal mode
+	CAN_InitStructure.CAN_Mode = CAN_Mode_Normal; // Modify for normal mode
 	// CAN_InitStructure.CAN_SJW = ?;
 	// CAN Baudrate = 500 Bps
 	// The bus the CAN is attached is of 45 Mhz.

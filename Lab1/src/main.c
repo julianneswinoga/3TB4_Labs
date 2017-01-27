@@ -32,7 +32,7 @@ int main(void) {
 
 			if (CAN_TransmitStatus(CANx, TransmitMailbox) ==
 				CANTXOK) { // that is: CAN_TxStatus_Ok, defined value as 0x01
-				LCD_DisplayLines(10, 1, (uint8_t *)"Message sent");
+				LCD_DisplayLines(10, 1, (uint8_t *)"Message sent OK");
 			} else { // if Tx status is CANTXFAILED (0x00), or
 				// CDANTXPENDING(0x02), or
 				// CAN_NO_MB(CAN_TxStatus_NoMailBox, 0x04))
@@ -45,6 +45,7 @@ int main(void) {
 				LCD_DisplayLines(10, 1, (uint8_t *)"Message cancled!");
 			}
 		}
-		LCD_DisplayInt(5, 5, Inturupt_Data.CAN_RxMessage[0]);
+		sprintf(msg, "DataTx: %i", Inturupt_Data.CAN_RxMessage[0]);
+		LCD_DisplayLines(5, 5, msg);
 	}
 }

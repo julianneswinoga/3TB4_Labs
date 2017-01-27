@@ -56,6 +56,6 @@ void EXTI0_IRQHandler(void) {}
 void CAN1_RX0_IRQHandler(void) {
 	CanRxMsg RxMessage;
 	int		 i = 0;
-	CAN_Receive(CAN1, 0, &RxMessage);
+	CAN_Receive(CANx, 0, &RxMessage);
 	for (i = 0; i < 8; i++) Inturupt_Data.CAN_RxMessage[i] = RxMessage.Data[i];
 }

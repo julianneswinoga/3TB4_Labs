@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 #define GROUP_ID 0xA
-#define TA_ID 0x005
+#define TA_ID 0x0
 
 #define KEY_PRESSED 0x00
 #define KEY_NOT_PRESSED 0x01
@@ -42,8 +42,9 @@
 typedef struct {
 	__IO bool UBPressed;		   // User button
 	__IO uint32_t DelayCounter;	// Counter for measuring delayed time
-	__IO CanTxMsg TxMessage;	   // CAN Tx Message
 	__IO uint8_t CAN_RxMessage[8]; // CAN Tx Message
+	__IO uint8_t TransmitMailbox;
+	__IO bool	CAN_Recieved;
 } INTURUPT_DATA;
 
 #endif /* __MAIN_H */

@@ -54,6 +54,7 @@ void TIM3_IRQHandler(void) {}
 void EXTI0_IRQHandler(void) {}
 
 void CAN1_RX0_IRQHandler(void) {
+	Inturupt_Data.CAN_Recieved = true;
 	CanRxMsg RxMessage;
 	int		 i = 0;
 	CAN_Receive(CANx, 0, &RxMessage);

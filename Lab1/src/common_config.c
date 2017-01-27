@@ -95,44 +95,49 @@ interrupt
 void CAN_Config(void) {
 	CAN_InitTypeDef		  CAN_InitStructure;
 	CAN_FilterInitTypeDef CAN_FilterInitStructure;
+	GPIO_InitTypeDef	  GPIO_InitStructure;
 	NVIC_InitTypeDef	  NVIC_InitStructure;
-	// NOTE: No GPIO ports or CAN bus is used for running in the Silent and
-	// Loopback mode,
-	// but required for normal operation
-	// The Baudrate of CAN bus used in lab is 500k Bps
-	/* CAN GPIOs configuration
-	 * **************************************************/
-	/* Enable GPIO clock */
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+
 	/* Connect CAN pins to AF9 */
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource0, GPIO_AF_CAN1);
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource1, GPIO_AF_CAN1);
+
 	/* Configure CAN RX and TX pins */
-	/* Use GPIO_Init() to initialize GPIO*/
-	/* CAN configuration
-	 * ********************************************************/
+	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_1 | GPIO_Pin_0;
+	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_UP;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+
 	/* Enable CAN clock */
 	RCC_APB1PeriphClockCmd(CAN_CLK, ENABLE);
 	/* CAN register init */
 	CAN_DeInit(CANx);
-	/* CAN cell init */
-	// CAN_InitStructure.CAN_TTCM = ?;
-	//  CAN_InitStructure.CAN_ABOM = ?;
-	//  CAN_InitStructure.CAN_AWUM = ?;
-	CAN_InitStructure.CAN_NART = ENABLE;
-	//  CAN_InitStructure.CAN_RFLM = ?;
-	//  CAN_InitStructure.CAN_TXFP = ?;
-	CAN_InitStructure.CAN_Mode = CAN_Mode_Normal; // Modify for normal mode
-	// CAN_InitStructure.CAN_SJW = ?;
-	// CAN Baudrate = 500 Bps
-	// The bus the CAN is attached is of 45 Mhz.
-	// with prescaler 3 (this is the "real" prescaler, during init process, 2
-	// will
-	// be written in register) while 1tq=2 clock cycle. (CAN clocked at 45  MHz
-	// for F429i board)
-	// so the baudrate should be 45/3/2/15   (15 is: 1+ 9forBS1 + 5forBS2)  =0.5
-	// M
-	// Bps (500 K Bps)
-	//  CAN_InitStructure.CAN_BS1 = ?;
-	//  CAN_InitStructure.CAN_BS2 = ?;
-	//  CAN_InitStructure.CAN_Prescaler = ?;
+	CAN_InitStructure.CAN_TTCM = DISABLE;
+
+	/* Initialize the automatic bus-off management */
+	CAN_InitStructure.CAN_ABOM = DISABLE;
+
+	/* Initialize the automatic wake-up mode */
+	CAN_InitStructure.CAN_AWUM = ENABLE;
+
+	/* Initialize the no automatic retransmission */
+	CAN_InitStructure.CAN_NART = DISABLE;
+
+	/* Initialize the receive FIFO locked mode */
+	CAN_InitStructure.CAN_RFLM = DISABLE;
+
+	/* Initialize the transmit FIFO priority */
+	CAN_InitStructure.CAN_TXFP = DISABLE;
+
+	/* Initialize the CAN_Mode member */
+	CAN_InitStructure.CAN_Mode		= CAN_Mode_Normal;
+	CAN_InitStructure.CAN_BS1		= 9;
+	CAN_InitStructure.CAN_BS2		= 5;
+	CAN_InitStructure.CAN_Prescaler = 3;
 	CAN_Init(CANx, &CAN_InitStructure);
 /* CAN filter init */
 #ifdef USE_CAN1
@@ -146,19 +151,12 @@ void CAN_Config(void) {
 	CAN_FilterInitStructure.CAN_FilterIdLow			 = 0x0000;
 	CAN_FilterInitStructure.CAN_FilterMaskIdHigh	 = 0x0000;
 	CAN_FilterInitStructure.CAN_FilterMaskIdLow		 = 0x0000;
-	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = 0;
+	CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_Filter_FIFO0;
 	CAN_FilterInitStructure.CAN_FilterActivation	 = ENABLE;
 	CAN_FilterInit(&CAN_FilterInitStructure);
-	/* Transmit Structure preparation */
-	Inturupt_Data.TxMessage.StdId   = GROUP_ID;
-	Inturupt_Data.TxMessage.ExtId   = 0x00;
-	Inturupt_Data.TxMessage.RTR		= CAN_RTR_DATA;
-	Inturupt_Data.TxMessage.IDE		= CAN_ID_STD;
-	Inturupt_Data.TxMessage.DLC		= 1;
-	Inturupt_Data.TxMessage.Data[0] = (GROUP_ID & 0x0FF); // group id
 	/* Enable FIFO 0 message pending Interrupt */
 
-	CAN_ITConfig(CAN1, CAN_IT_FMP0,
+	CAN_ITConfig(CANx, CAN_IT_FMP0,
 				 ENABLE); // The FIFO0 message to register interrupt enable
 
 	NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;

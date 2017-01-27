@@ -104,19 +104,19 @@ void setPWMDuty(float duty) {
 }
 
 uint8_t Can_Send_Msg(uint8_t *msg, uint8_t len) {
-	uint8_t  mbox;
-	uint16_t i = 0;
 	CanTxMsg TxMessage;
-	TxMessage.StdId = 0x12; // Standard identifier is 0
-	TxMessage.ExtId = 0x12; // Setting the extension identifier (29 bits)
-	TxMessage.IDE   = 0;	// Using an extended identifier
-	TxMessage.RTR   = 0; // Message types for the data frame, 8 bits in a frame
-	TxMessage.DLC   = len; // Two frames of information transmission
-	for (i				  = 0; i < len; i++)
-		TxMessage.Data[i] = msg[i]; // The first frame information
-	mbox				  = CAN_Transmit(CAN1, &TxMessage);
-	i					  = 0;
-	while ((CAN_TransmitStatus(CAN1, mbox) == CAN_TxStatus_Failed) &&
+	uint16_t i		= 0;
+	TxMessage.StdId = 0x0;		  // Standard identifier is 0
+	TxMessage.IDE   = CAN_ID_STD; // Using an extended identifier
+	TxMessage.RTR =
+		CAN_RTR_DATA;	// Message types for the data frame, 8 bits in a frame
+	TxMessage.DLC = len; // Two frames of information transmission
+	for (i						  = 0; i < len; i++)
+		TxMessage.Data[i]		  = msg[i]; // The first frame information
+	Inturupt_Data.TransmitMailbox = CAN_Transmit(CANx, &TxMessage);
+	i							  = 0;
+	while ((CAN_TransmitStatus(CAN1, Inturupt_Data.TransmitMailbox) ==
+			CAN_TxStatus_Failed) &&
 		   (i < 0XFFF))
 		i++; // Waiting for the end of transmission
 	if (i >= 0XFFF) return 1;

@@ -56,7 +56,18 @@ void EXTI0_IRQHandler(void) {}
 void CAN1_RX0_IRQHandler(void) {
 	Inturupt_Data.CAN_Recieved = true;
 	CanRxMsg RxMessage;
-	int		 i = 0;
+	
+	RxMessage.StdId = 0x0;
+	RxMessage.ExtId = 0x0;
+	RxMessage.IDE = CAN_ID_STD;
+	RxMessage.DLC = 2;
+	
+	int i = 0;
 	CAN_Receive(CANx, 0, &RxMessage);
-	for (i = 0; i < 8; i++) Inturupt_Data.CAN_RxMessage[i] = RxMessage.Data[i];
+	for (i = 0; i < 2; i++) Inturupt_Data.CAN_RxMessage[i] = RxMessage.Data[i];
+	LCD_Config(); // Initialize LCD
+	char msg[64];
+	sprintf(msg, "DataTx: %i", Inturupt_Data.CAN_RxMessage[1]);
+	LCD_DisplayLines(5, 5, msg);
+	
 }

@@ -12,6 +12,8 @@
 #define GROUP_ID 0xA
 #define TA_ID 0x0
 
+#define Msg 254
+
 #define KEY_PRESSED 0x00
 #define KEY_NOT_PRESSED 0x01
 

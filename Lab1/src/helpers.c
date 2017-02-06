@@ -126,7 +126,7 @@ uint8_t Can_Send_Msg(uint8_t *msg, uint8_t len) {
 uint8_t Can_Receive_Msg(uint8_t *buf) {
 	uint32_t i;
 	CanRxMsg RxMessage;
-	if (CAN_MessagePending(CAN1, CAN_FIFO0) == 0)
+	if (CAN_MessagePending(CANx, CAN_FIFO0) == 0)
 		return 0; // No data received, directly from the
 	CAN_Receive(CAN1, CAN_FIFO0, &RxMessage); // Read data
 	for (i = 0; i < 8; i++) buf[i] = RxMessage.Data[i];

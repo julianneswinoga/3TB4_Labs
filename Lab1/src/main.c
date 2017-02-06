@@ -32,7 +32,7 @@ int main(void) {
 			TxMessage.DLC = 1;
 			for (int j = 0;j < 8;j++)
 				TxMessage.Data[j] = 0x0;
-			TxMessage.Data[0] = GROUP_ID;
+			TxMessage.Data[0] = GROUP_ID & 0x0FF;
 			
 			Inturupt_Data.TransmitMailbox = CAN_Transmit(CANx, &TxMessage);
 
@@ -42,8 +42,13 @@ int main(void) {
 				(uint8_t *)msg); // Display the transmitted message data
 			*/
 			Delay(1000);
+			
+			Can_Receive_Msg(msg);
+			LCD_Config(); // Initialize LCD
+			sprintf(msg, "DataRx: %i", Msg);
+			LCD_DisplayLines(5, 5, msg);
 
-			if (CAN_TransmitStatus(CANx, Inturupt_Data.TransmitMailbox) ==
+			/*if (CAN_TransmitStatus(CANx, Inturupt_Data.TransmitMailbox) ==
 				CANTXOK) { // that is: CAN_TxStatus_Ok, defined value as 0x01
 				// LCD_DisplayLines(10, 1, (uint8_t *)"Message sent OK");
 				STM_EVAL_LEDOn(LED3);
@@ -55,7 +60,7 @@ int main(void) {
 					CANx, Inturupt_Data.TransmitMailbox); // Cancel transmit,
 				STM_EVAL_LEDOn(LED4);
 				// LCD_DisplayLines(10, 1, (uint8_t *)"Message cancled!");
-			}
+			}*/
 		}
 		if (Inturupt_Data.CAN_RxMessage[0] == GROUP_ID ||
 			Inturupt_Data.CAN_Recieved) {

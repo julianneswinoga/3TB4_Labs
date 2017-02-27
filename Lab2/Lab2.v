@@ -14,18 +14,18 @@ module Lab2 (
 		.Pulse_ms(clk)
 	);
 	
-	/*control_ff c_ff(
-		.Clock(clk),
+	control_ff c_ff(
+		//.Clock(clk),
 		.Set(~KEY[1]),
 		.Clear(~KEY[2]),
 		.Q(counting)
-	);*/
+	);
 	
 	hex_counter h_counter(
 		.Clock(clk),
 		.Reset(~KEY[0]),
-		.Enable(KEY[1]),
-		.Stp(~KEY[1]),
+		.Enable(counting),
+		.Stp(~counting),
 		.Q(numbah)
 	);
 	
@@ -88,19 +88,32 @@ module Lab2 (
 
 endmodule
 
-module control_ff (
+/*module control_ff (
 	input Clock, Set, Clear,
 	output reg Q
 	);
 	
-	always @ (posedge Clock) begin
-		if(Clear) begin
+	wire QQ;
+	
+	assign QQ = Q;
+	always @ (posedge Clock or posedge Set or posedge Clear) begin
+		if(Clear & QQ) begin
 			Q <= 0;
-		end else if (Set) begin
+		end else if (Set & ~QQ) begin
 			Q <= 1;
 		end
 	end
-endmodule
+endmodule*/
+
+module control_ff (
+	input Set, Clear,
+	output Q
+	);
+	
+	wire Qbar;
+	nor (Q, Clear, Qbar);
+	nor (Qbar, Set, Q);
+endmodule 
 
 module clock_divider (
 	input Clock, Reset,
@@ -129,7 +142,7 @@ module hex_counter (
 	output reg [31:0]Q
 	);
 	
-	always @(posedge Clock) begin
+	always @(posedge Clock or posedge Reset) begin
 		if (Reset) begin
 			Q <= 0;
 		end else if (Stp) begin

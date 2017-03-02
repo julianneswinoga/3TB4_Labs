@@ -109,18 +109,16 @@ endmodule
 module echoMachine(
 	input clock,
 	input wire[15:0] input_sample,
-	output reg[15:0] output_sample
+	output [15:0] output_sample
 	);
 	
 	wire[15:0] delay;
+	
+	assign output_sample = input_sample + ($signed(delay) >> 5);
 	
 	shiftregister shift(
 	.clock(clock),
 	.shiftin(output_sample),
 	.shiftout(delay)
-	);
-	
-	always @ (posedge clock) begin
-		output_sample = input_sample + ($signed(delay) >> 2);
-	end
+	);	
 endmodule

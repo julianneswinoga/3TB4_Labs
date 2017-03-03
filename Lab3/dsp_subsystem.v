@@ -52,33 +52,27 @@ module FIRfilter(
 	output reg[15:0] output_sample
 	);
 	
-	parameter N = 21;
+	parameter N = 15;
 	reg signed[15:0] coeffs[N-1:0];	
 	reg [15:0] registers[N-1:0];
 	wire [31:0] toAdd[N-1:0];
 	
 	always @ (*) begin
-coeffs[0]=-118;
-coeffs[1]=0;
-coeffs[2]=418;
+coeffs[0]=0;
+coeffs[1]=-437;
+coeffs[2]=0;
 coeffs[3]=0;
-coeffs[4]=-217;
-coeffs[5]=0;
-coeffs[6]=-2888;
-coeffs[7]=0;
-coeffs[8]=8505;
-coeffs[9]=0;
-coeffs[10]=21369;
+coeffs[4]=0;
+coeffs[5]=8626;
+coeffs[6]=0;
+coeffs[7]=16389;
+coeffs[8]=0;
+coeffs[9]=8626;
+coeffs[10]=0;
 coeffs[11]=0;
-coeffs[12]=8505;
-coeffs[13]=0;
-coeffs[14]=-2888;
-coeffs[15]=0;
-coeffs[16]=-217;
-coeffs[17]=0;
-coeffs[18]=418;
-coeffs[19]=0;
-coeffs[20]=-118;
+coeffs[12]=0;
+coeffs[13]=-437;
+coeffs[14]=0;
 	end
 	
 	genvar i;

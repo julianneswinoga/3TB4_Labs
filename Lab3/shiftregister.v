@@ -67,8 +67,8 @@ module shiftregister (
 		ALTSHIFT_TAPS_component.intended_device_family = "Cyclone II",
 		ALTSHIFT_TAPS_component.lpm_hint = "RAM_BLOCK_TYPE=M4K",
 		ALTSHIFT_TAPS_component.lpm_type = "altshift_taps",
-		ALTSHIFT_TAPS_component.number_of_taps = 128,
-		ALTSHIFT_TAPS_component.tap_distance = 4,
+		ALTSHIFT_TAPS_component.number_of_taps = 32,
+		ALTSHIFT_TAPS_component.tap_distance = 32,
 		ALTSHIFT_TAPS_component.width = 16;
 
 

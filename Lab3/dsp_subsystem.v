@@ -95,7 +95,7 @@ coeffs[14]=0;
 		
 		output_sample = 0;
 		for (j = 0; j < N; j = j + 1) begin
-			output_sample = output_sample + (toAdd[j] >> 15);
+			output_sample = output_sample + (toAdd[j] >> 14);
 		end
 	end
 endmodule
@@ -103,16 +103,22 @@ endmodule
 module echoMachine(
 	input clock,
 	input wire[15:0] input_sample,
-	output [15:0] output_sample
+	output reg [15:0] output_sample
 	);
 	
-	wire[15:0] delay;
+	wire[15:0] delayed_samp;
+	reg[15:0] delay_samp;
+	reg[15:0] attenuated;
 	
-	assign output_sample = input_sample + ($signed(delay) >> 5);
+	always @ (posedge clock) begin
+		delay_samp <= output_sample;
+		attenuated <= {{2{delayed_samp[15]}}, delayed_samp[15:2]};
+		output_sample = input_sample + attenuated;
+	end
 	
 	shiftregister shift(
 	.clock(clock),
-	.shiftin(output_sample),
-	.shiftout(delay)
+	.shiftin(delay_samp),
+	.shiftout(delayed_samp)
 	);	
 endmodule

@@ -6,17 +6,18 @@ module SRAM_Controller (
 	inout reg [15:0] SRAM_DQ,
 	output reg [15:0] read_data,
 	output [17:0] SRAM_ADDR,
-	output SRAM_CE_N, SRAM_WE_N, SRAM_OE_N, SRAM_UB_N,SRAM_LB_N			
+	output reg SRAM_CE_N,
+	output SRAM_WE_N, SRAM_OE_N, SRAM_UB_N,SRAM_LB_N			
 	);
 
 	assign SRAM_ADDR = address;
 	assign SRAM_UB_N = ~byte_enable[0];
 	assign SRAM_LB_N = ~byte_enable[1];
-	assign SRAM_CE_N = ~chipselect;
 	assign SRAM_OE_N = ~read;
 	assign SRAM_WE_N = ~write;
 	
 	always @ (posedge clk) begin
+		SRAM_CE_N = ~chipselect;
 		if (chipselect) begin
 			if (read)
 				read_data <= SRAM_DQ;

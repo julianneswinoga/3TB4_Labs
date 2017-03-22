@@ -56,12 +56,15 @@ assign SRAM_UB_N = SRAM_UB_N_wire;
 assign SRAM_LB_N = SRAM_LB_N_wire;
 
 sopc_system  NiosII(
-		//Inputs
 		.clk_clk(CLOCK_50),     // clk.clk
 		.reset_reset_n(KEY[0]), //reset.reset_n
-		
-		//more port connections....
-		
+		.sram_controller_0_conduit_end_export(SRAM_DQ), // SRAM_DQ
+		.sram_controller_0_conduit_end_1_export(SRAM_ADDR), // SRAM_ADDR
+		.sram_controller_0_conduit_end_2_export(SRAM_CE_N_wire), // SRAM_CE_N
+		.sram_controller_0_conduit_end_3_export(SRAM_WE_N_wire), // SRAM_WE_N
+		.sram_controller_0_conduit_end_4_export(SRAM_OE_N_wire), // SRAM_OE_N
+		.sram_controller_0_conduit_end_5_export(SRAM_UB_N_wire), // SRAM_UB_N
+		.sram_controller_0_conduit_end_6_export(SRAM_LB_N_wire), // SRAM_LB_N
 	);
 
 

@@ -25,10 +25,10 @@
 
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C35F672C6
-set_global_assignment -name TOP_LEVEL_ENTITY datapath
+set_global_assignment -name TOP_LEVEL_ENTITY regfile
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "7.2 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "12:30:47  MARCH 15, 2008"
-set_global_assignment -name LAST_QUARTUS_VERSION 13.0
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_palace
 set_global_assignment -name LL_ROOT_REGION ON -entity op1_mux -section_id "Root Region"
 set_global_assignment -name LL_MEMBER_STATE LOCKED -entity op1_mux -section_id "Root Region"
@@ -45,11 +45,6 @@ set_location_assignment PIN_V18 -to LEDG[3]
 set_location_assignment PIN_W19 -to LEDG[2]
 set_location_assignment PIN_AF22 -to LEDG[1]
 set_location_assignment PIN_AE22 -to LEDG[0]
-set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
-set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_COLOR 2147039 -section_id Top
-set_instance_assignment -name PARTITION_HIERARCHY no_file_for_top_partition -to | -section_id Top
 set_global_assignment -name VERILOG_FILE lab5.v
 set_global_assignment -name VERILOG_FILE regfile.v
 set_global_assignment -name VERILOG_FILE delay_counter.v
@@ -65,4 +60,17 @@ set_global_assignment -name VERILOG_FILE write_address_select.v
 set_global_assignment -name VERILOG_FILE branch_logic.v
 set_global_assignment -name VERILOG_FILE decoder.v
 set_global_assignment -name VERILOG_FILE result_mux.v
-set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE datapath_test.vwf
+set_global_assignment -name LL_ROOT_REGION ON -section_id "Root Region"
+set_global_assignment -name LL_MEMBER_STATE LOCKED -section_id "Root Region"
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_COLOR 2147039 -section_id Top
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+set_global_assignment -name VECTOR_OUTPUT_FORMAT VWF
+set_global_assignment -name VECTOR_WAVEFORM_FILE regfile_sim.vwf
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE "C:/Users/CameronSwinoga/OneDrive/Documents/School/McMaster/Third Year/MECHTRON 3TB4/3TB4_Labs/Lab5/regfile_sim.vwf"

@@ -5,10 +5,10 @@ module write_address_select (
 
 	always @(*) begin
 		case (select)
-			0: write_address = 2'b0;
+			0: write_address = 2'd0;
 			1: write_address = reg_field0;
 			2: write_address = reg_field1;
-			3: write_address = 2'b0;
+			3: write_address = 2'd2;
 		endcase
 	end
 

@@ -77,3 +77,4 @@ set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST ON -section_id eda_simulation
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE "C:/Users/CameronSwinoga/OneDrive/Documents/School/McMaster/Third Year/MECHTRON 3TB4/3TB4_Labs/Lab5/pc_sim.vwf"
+set_global_assignment -name MIF_FILE instruction_rom.mif

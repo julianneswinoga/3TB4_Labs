@@ -7,7 +7,8 @@ module delay_counter (
 	parameter CLK_HZ = 500000;
 	parameter DELAY_HZ = 100;
 	
-	reg [7:0] delay_register, ms_counter;
+	reg [7:0] delay_register;
+	reg [31:0] ms_counter;
 	
 	always @ (posedge clk) begin
 		if (start)
@@ -18,7 +19,7 @@ module delay_counter (
 				done <= 1;
 			else
 				done <= 0;
-			if (ms_counter == 7'b0) begin
+			if (ms_counter == 31'b0) begin
 				ms_counter <= CLK_HZ / DELAY_HZ;
 				delay_register <= delay_register - 1;
 			end else

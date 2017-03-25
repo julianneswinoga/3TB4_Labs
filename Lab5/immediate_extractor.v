@@ -1,5 +1,16 @@
-module immediate_extractor (input [7:0] instruction, input [1:0] select, output reg [7:0] immediate);
+module immediate_extractor (
+	input [7:0] instruction,
+	input [1:0] select,
+	output reg [7:0] immediate
+	);
 
-
+	always @ (*) begin
+		case (select)
+			0: immediate = {3'b0, instruction[4:2], 2'b0}; // 3­bit immediate operand
+			1: immediate = {4'b0, instruction[3:0]}; // 4­bit immediate operand
+			2: immediate = {3'b0, instruction[4:0]}; // 5­bit immediate operand
+			3: immediate = 7'b0; // MOV instruction
+		endcase
+	end
 
 endmodule

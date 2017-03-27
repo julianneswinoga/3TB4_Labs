@@ -9,9 +9,10 @@ module regfile(
 	
 	always @ (posedge clock) begin
 		if (!reset_n) begin
-			registers[0] = 7'b0;
-			registers[1] = 7'b0;
-			registers[2] = 7'b0;
+			registers[0] = 8'b0;
+			registers[1] = 8'b0;
+			registers[2] = 8'b0;
+			registers[3] = 8'b0;
 		end else if (write) begin
 			registers[wr_select] = data;
 		end

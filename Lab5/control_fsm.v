@@ -15,17 +15,22 @@ module control_fsm (
 	output reg load_temp_register, increment_temp_register, decrement_temp_register,
 	output reg [1:0] select_immediate,
 	output reg [1:0] select_write_address
-	
-);
-parameter RESET=5'b00000, FETCH=5'b00001, DECODE=5'b00010,
+	);
+
+	parameter RESET=5'b00000, FETCH=5'b00001, DECODE=5'b00010,
 			BR=5'b00011, BRZ=5'b00100, ADDI=5'b00101, SUBI=5'b00110, SR0=5'b00111,
 			SRH0=5'b01000, CLR=5'b01001, MOV=5'b01010, MOVA=5'b01011,
 			MOVR=5'b01100, MOVRHS=5'b01101, PAUSE=5'b01110, MOVR_STAGE2=5'b01111,
 			MOVR_DELAY=5'b10000, MOVRHS_STAGE2=5'b10001, MOVRHS_DELAY=5'b10010,
 			PAUSE_DELAY=5'b10011;
 
-reg [5:0] state;
-reg [5:0] next_state_logic; // NOT REALLY A REGISTER!!!
+	reg [5:0] state, next_state_logic;
+
+	always @ (posedge clk) begin
+		if (~reset_n) begin
+			state = 6'd0;
+		end
+	end
 
 // Next state logic
 

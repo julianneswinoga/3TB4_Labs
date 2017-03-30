@@ -28,8 +28,17 @@ module control_fsm (
 
 	always @ (posedge clk) begin
 		if (~reset_n) begin
-			state = 6'd0;
+			state = RESET;
 		end
+		
+		case (state)
+			RESET: begin
+				state <= FETCH; // Reset PC and reset registers should happen automatically
+			end
+			FETCH: begin
+				
+			end
+		endcase
 	end
 
 // Next state logic

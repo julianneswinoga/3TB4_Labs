@@ -14,7 +14,8 @@ module datapath (input clk, reset_n,
 	output temp_is_positive, temp_is_negative, temp_is_zero,
 	output register0_is_zero,
 	// Motor control outputs
-	output [3:0] stepper_signals
+	output [3:0] stepper_signals,
+	output [7:0] _PC
 	);
 	
 	wire [7:0] position /*synthesis keep*/;
@@ -28,6 +29,8 @@ module datapath (input clk, reset_n,
 	wire [7:0] imediate_operand;
 	wire [7:0] operand_mux_1, operand_mux_2;
 	wire [7:0] result_mux_output;
+	
+	assign _PC = PC; // DEBUG
 
 	decoder the_decoder (
 		// Inputs
@@ -52,8 +55,8 @@ module datapath (input clk, reset_n,
 		.reset_n (reset_n),
 		.write (write_reg_file),
 		.data (result_mux_output), 
-		.select0 (instruction),
-		.select1 (instruction),
+		.select0 (instruction[1:0]),
+		.select1 (instruction[3:2]),
 		.wr_select (write_address_data),
 		// Outputs
 		.selected0 (selected_zero),
@@ -156,8 +159,8 @@ module datapath (input clk, reset_n,
 	write_address_select the_write_address_select(
 		// Inputs
 		.select (select_write_address),
-		.reg_field0 (instruction),
-		.reg_field1 (instruction),
+		.reg_field0 (instruction[1:0]),
+		.reg_field1 (instruction[3:2]),
 		// Outputs
 		.write_address(write_address_data)
 	);

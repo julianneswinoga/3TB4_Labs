@@ -18,9 +18,15 @@ WIDTH=4;
 DEPTH=8;
 
 ADDRESS_RADIX=UNS;
-DATA_RADIX=UNS;
+DATA_RADIX=BIN;
 
 CONTENT BEGIN
-	0  :   15;
-	[1..7]  :   0;
+	0  :   1000;
+	1  :   1100;
+	2  :   0100;
+	3  :   0110;
+	4  :   0010;
+	5  :   0011;
+	6  :   0001;
+	7  :   1001;
 END;

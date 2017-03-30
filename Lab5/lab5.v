@@ -2,7 +2,9 @@
 module lab5 (
 	input clk, reset_n,
 	output [3:0] stepper_signals,
-	output [3:0] LEDG
+	output [3:0] LEDG,
+	output [7:0] _PC,
+	output [4:0] _STATE
 	);
 
 	wire br, brz, addi, subi, sr0, srh0, clr, mov, mova, movr, movrhs, pause;
@@ -59,7 +61,8 @@ module lab5 (
 		.increment_temp_register (increment_temp_register),
 		.decrement_temp_register (decrement_temp_register),
 		.select_immediate (select_immediate),
-		.select_write_address (select_write_address)	
+		.select_write_address (select_write_address),
+		._STATE(_STATE)
 	);
 
 	datapath the_datapath (
@@ -101,8 +104,9 @@ module lab5 (
 		.temp_is_zero (temp_is_zero),
 		.register0_is_zero (register0_is_zero),
 		// Motor control outputs
-		.stepper_signals (stepper_signals)
+		.stepper_signals (stepper_signals),
 		// Temporary outputs for debugging purposes
+		._PC(_PC)
 	);
 
 

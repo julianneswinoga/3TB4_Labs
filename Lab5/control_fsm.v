@@ -33,9 +33,9 @@ module control_fsm (
 	always @ (posedge clk) begin
 		if (!reset_n) begin
 			state <= RESET;
-			execute_stage <= 0;
+			execute_stage <= 2'd0;
 		end else if (execute_stage == 4'd0) begin
-			execute_stage <= 4'd2;
+			execute_stage <= 4'd0;
 			case (state)
 				RESET: begin
 					// Reset PC and reset registers should happen automatically
@@ -45,11 +45,25 @@ module control_fsm (
 				FETCH: begin
 					// Fetching instruction should happen automatically
 					state <= DECODE;
-					increment_pc <= 0;
+					
+					write_reg_file <= 0;
+					result_mux_select <= 0;
+					op1_mux_select <= 2'd0;
+					op2_mux_select <= 2'd0;
+					start_delay_counter <= 0;
+					enable_delay_counter <= 0;
 					commit_branch <= 0;
+					increment_pc <= 0;
+					alu_add_sub <= 0;
+					alu_set_low <= 0;
+					alu_set_high <= 0;
+					load_temp_register <= 0;
+					increment_temp_register <= 0;
+					decrement_temp_register <= 0;
+					select_immediate <= 2'd0;
+					select_write_address <= 2'd0;
 				end
 				DECODE: begin
-					increment_pc <= 0;
 					if (addi)
 						state <= ADDI;
 					if (subi)
@@ -78,7 +92,7 @@ module control_fsm (
 					select_write_address <= 2'd1; // Write to first register
 					select_immediate <= 2'd0; // 3-bit immediate value
 					
-					op1_mux_select <= 2'd1;
+					op1_mux_select <= 2'd1; // Register
 					op2_mux_select <= 2'd1; // OP2 = immediate
 					if (state == ADDI) begin
 						alu_add_sub <= 0; // Add

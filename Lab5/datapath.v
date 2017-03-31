@@ -15,25 +15,27 @@ module datapath (input clk, reset_n,
 	output register0_is_zero,
 	// Motor control outputs
 	output [3:0] stepper_signals,
-	output [7:0] _PC, _INSTRUCTION, ALUOP1, ALUOP2
+	output [7:0] _PC, _INSTRUCTION, ALUOP1, ALUOP2, IMMEDIATE_OUT
 	);
 	
 	wire [7:0] position /*synthesis keep*/;
 	wire [7:0] delay /*synthesis keep*/;
 	wire [7:0] register0 /*synthesis keep*/;
-	
-	wire [7:0] instruction, alu_result, PC;
-	
-	wire [1:0] write_address_data;
-	wire [7:0] selected_zero, selected_one;
-	wire [7:0] imediate_operand;
-	wire [7:0] operand_mux_1, operand_mux_2;
-	wire [7:0] result_mux_output;
+	wire [7:0] instruction /*synthesis keep*/;
+	wire [7:0] alu_result /*synthesis keep*/;
+	wire [7:0] PC /*synthesis keep*/;
+	wire [1:0] write_address_data /*synthesis keep*/;
+	wire [7:0] selected_zero, selected_one /*synthesis keep*/;
+	wire [7:0] imediate_operand /*synthesis keep*/;
+	wire [7:0] operand_mux_1 /*synthesis keep*/;
+	wire [7:0] operand_mux_2 /*synthesis keep*/;
+	wire [7:0] result_mux_output /*synthesis keep*/;
 	
 	assign _PC = PC; // DEBUG
 	assign _INSTRUCTION = instruction;
 	assign ALUOP1 = operand_mux_1;
 	assign ALUOP2 = operand_mux_2;
+	assign IMMEDIATE_OUT = imediate_operand;
 
 	decoder the_decoder (
 		// Inputs

@@ -6,7 +6,7 @@ module result_mux (
 
 	always @(*) begin
 		case (select_result)
-			0: result = 7'b0;
+			0: result = 8'b0;
 			1: result = alu_result;
 		endcase
 	end

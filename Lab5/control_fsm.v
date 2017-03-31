@@ -194,14 +194,17 @@ module control_fsm (
 					end
 					state <= FETCH;
 				end
-				MOVR: begin
+				MOVR, MOVRHS: begin
 					load_temp_register <= 1;
 					increment_temp_register <= 0;
 					decrement_temp_register <= 0;
-					state <= MOVR_STAGE2;
+					if (state == MOVR)
+						state <= MOVR_STAGE2;
+					else if (state == MOVRHS)
+						state <= MOVRHS_STAGE2;
 					increment_pc <= 0;
 				end
-				MOVR_STAGE2: begin
+				MOVR_STAGE2, MOVRHS_STAGE2: begin
 					load_temp_register <= 0;
 					if (temp_is_zero) begin
 						increment_pc <= 1;
@@ -214,8 +217,12 @@ module control_fsm (
 							write_reg_file <= 1; // Write to register
 							
 							op1_mux_select <= 2'd2; // Select R2
-							op2_mux_select <= 2'd3; // Select '2'
 							
+							if (state == MOVR_STAGE2)
+								op2_mux_select <= 2'd3; // Select '2'
+							else if (state == MOVRHS_STAGE2)
+								op2_mux_select <= 2'd2; // Select '1'
+								
 							alu_add_sub <= 0; // Add
 							alu_set_low <= 0;
 							alu_set_high <= 0;
@@ -228,7 +235,11 @@ module control_fsm (
 							write_reg_file <= 1; // Write to register
 							
 							op1_mux_select <= 2'd2; // Select R2
-							op2_mux_select <= 2'd3; // Select '2'
+							
+							if (state == MOVR_STAGE2)
+								op2_mux_select <= 2'd3; // Select '2'
+							else if (state == MOVRHS_STAGE2)
+								op2_mux_select <= 2'd2; // Select '1'
 							
 							alu_add_sub <= 1; // Subtract
 							alu_set_low <= 0;
@@ -239,73 +250,26 @@ module control_fsm (
 						end
 						
 						start_delay_counter <= 1;
-						state <= MOVR_DELAY;				
-					end
-				end
-				MOVR_DELAY: begin
-					increment_pc <= 0;
-					if (delay_done) begin
-						enable_delay_counter <= 1;
-						state <= MOVR_STAGE2; // Go back to MOVR_STAGE2 when done
-					end else begin
-						state <= MOVR_DELAY; // Loop if delay is not done
-					end
-				end
-				MOVRHS: begin
-					load_temp_register <= 1;
-					increment_temp_register <= 0;
-					decrement_temp_register <= 0;
-					state <= MOVRHS_STAGE2;
-					increment_pc <= 0;
-				end
-				MOVRHS_STAGE2: begin
-					load_temp_register <= 0;
-					if (temp_is_zero) begin
-						increment_pc <= 1;
-						state <= FETCH;
-					end else begin
-						increment_pc <= 0;
-						if (temp_is_positive) begin
-							decrement_temp_register <= 1;
-							
-							write_reg_file <= 1; // Write to register
-							
-							op1_mux_select <= 2'd2; // Select R2
-							op2_mux_select <= 2'd2; // Select '1'
-							
-							alu_add_sub <= 0; // Add
-							alu_set_low <= 0;
-							alu_set_high <= 0;
-							
-							result_mux_select <= 1; // Use ALU result
-							select_write_address <= 2'd3; // Select R2						
-						end else if (temp_is_negative) begin
-							increment_temp_register <= 1;
-							
-							write_reg_file <= 1; // Write to register
-							
-							op1_mux_select <= 2'd2; // Select R2
-							op2_mux_select <= 2'd2; // Select '1'
-							
-							alu_add_sub <= 1; // Subtract
-							alu_set_low <= 0;
-							alu_set_high <= 0;
-							
-							result_mux_select <= 1; // Use ALU result
-							select_write_address <= 2'd3; // Select R2	
-						end
 						
-						start_delay_counter <= 1;
-						state <= MOVRHS_DELAY;				
+						if (state == MOVR_STAGE2)
+							state <= MOVR_DELAY;
+						else if (state == MOVRHS_STAGE2)
+							state <= MOVRHS_DELAY;
 					end
 				end
-				MOVRHS_DELAY: begin
+				MOVR_DELAY, MOVRHS_DELAY: begin
 					increment_pc <= 0;
 					if (delay_done) begin
 						enable_delay_counter <= 1;
-						state <= MOVRHS_STAGE2; // Go back to MOVR_STAGE2 when done
+						if (state == MOVR_DELAY)
+							state <= MOVR_STAGE2; // Go back to MOVR_STAGE2 when done
+						else if (state == MOVRHS_DELAY)
+							state <= MOVRHS_STAGE2;
 					end else begin
-						state <= MOVRHS_DELAY; // Loop if delay is not done
+						if (state == MOVR_DELAY)
+							state <= MOVR_DELAY; // Loop if delay is not done
+						else if (state == MOVRHS_DELAY)
+							state <= MOVRHS_DELAY;
 					end
 				end
 				PAUSE: begin

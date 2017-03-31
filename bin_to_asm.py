@@ -1,7 +1,7 @@
 from bitstring import Bits
 
 #code = "01100000	01001010	01111100	01000011	11000100	00111000	11001000	10011001"
-code = "01100010	00001010	10011111	"
+code = "01100010	00000110	10011111"
 instr = code.split("\t")
 
 addr = 0
@@ -20,7 +20,7 @@ for i in instr:
     if (i[0:4] == '0101'):
         print 'srh0', i[4:8]
     if (i[0:6] == '011000'):
-        print 'clr', i[6:8]
+        print 'clr', Bits(bin=i[6:8]).uint
     if (i[0:4] == '0111'):
         print 'mov', Bits(bin=i[6:8]).uint, '=>', Bits(bin=i[4:6]).uint
     if (i[0:6] == '110000'):

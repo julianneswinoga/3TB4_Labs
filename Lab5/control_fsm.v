@@ -26,7 +26,7 @@ module control_fsm (
 			PAUSE_DELAY=5'd19;
 
 	reg [5:0] state;
-	reg [1:0] execute_stage;
+	reg [3:0] execute_stage;
 	
 	assign _STATE = state;
 	
@@ -34,8 +34,8 @@ module control_fsm (
 		if (!reset_n) begin
 			state <= RESET;
 			execute_stage <= 0;
-		end else if (execute_stage == 2'd0) begin
-			execute_stage <= 2'd3;
+		end else if (execute_stage == 4'd0) begin
+			execute_stage <= 4'd2;
 			case (state)
 				RESET: begin
 					// Reset PC and reset registers should happen automatically

@@ -6,7 +6,7 @@ module immediate_extractor (
 
 	always @ (*) begin
 		case (select)
-			0: immediate = {3'b0, instruction[4:2], 2'b0}; // 3­bit immediate operand
+			0: immediate = {5'b0, instruction[4:2]}; // 3­bit immediate operand
 			1: immediate = {4'b0, instruction[3:0]}; // 4­bit immediate operand
 			2: immediate = {{3{instruction[4]}}, instruction[4:0]}; // 5­bit immediate operan, sign padding
 			3: immediate = 7'b0; // MOV instruction

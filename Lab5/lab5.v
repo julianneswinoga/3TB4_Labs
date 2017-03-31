@@ -3,7 +3,7 @@ module lab5 (
 	input clk, reset_n,
 	output [3:0] stepper_signals,
 	output [3:0] LEDG,
-	output [7:0] _PC,
+	output [7:0] _PC, _INSTRUCTION, ALUOP1, ALUOP2,
 	output [4:0] _STATE
 	);
 
@@ -106,7 +106,10 @@ module lab5 (
 		// Motor control outputs
 		.stepper_signals (stepper_signals),
 		// Temporary outputs for debugging purposes
-		._PC(_PC)
+		._PC(_PC),
+		._INSTRUCTION(_INSTRUCTION),
+		.ALUOP1(ALUOP1),
+		.ALUOP2(ALUOP2)
 	);
 
 

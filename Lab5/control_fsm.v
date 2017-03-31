@@ -25,50 +25,53 @@ module control_fsm (
 			MOVR_DELAY=5'd16, MOVRHS_STAGE2=5'd17, MOVRHS_DELAY=5'd18,
 			PAUSE_DELAY=5'd19;
 
-	reg [5:0] state, next_state_logic;
+	reg [5:0] state;
+	reg [1:0] execute_stage;
 	
 	assign _STATE = state;
 	
 	always @ (posedge clk) begin
 		if (!reset_n) begin
-			state = RESET;
-			next_state_logic <= RESET;
-		end else begin
+			state <= RESET;
+			execute_stage <= 0;
+		end else if (execute_stage == 2'd0) begin
+			execute_stage <= 2'd3;
 			case (state)
 				RESET: begin
 					// Reset PC and reset registers should happen automatically
-					next_state_logic <= FETCH;
+					state <= FETCH;
 					increment_pc <= 0;
 				end
 				FETCH: begin
 					// Fetching instruction should happen automatically
-					next_state_logic <= DECODE;
+					state <= DECODE;
 					increment_pc <= 0;
+					commit_branch <= 0;
 				end
 				DECODE: begin
 					increment_pc <= 0;
 					if (addi)
-						next_state_logic <= ADDI;
+						state <= ADDI;
 					if (subi)
-						next_state_logic <= SUBI;
+						state <= SUBI;
 					if (mov)
-						next_state_logic <= MOV;
+						state <= MOV;
 					if (sr0)
-						next_state_logic <= SR0;
+						state <= SR0;
 					if (srh0)
-						next_state_logic <= SRH0;
+						state <= SRH0;
 					if (clr)
-						next_state_logic <= CLR;
+						state <= CLR;
 					if (br)
-						next_state_logic <= BR;
+						state <= BR;
 					if (brz)
-						next_state_logic <= BRZ;
+						state <= BRZ;
 					if (movr)
-						next_state_logic <= MOVR;
+						state <= MOVR;
 					if (movrhs)
-						next_state_logic <= MOVRHS;
+						state <= MOVRHS;
 					if (pause)
-						next_state_logic <= PAUSE;
+						state <= PAUSE;
 				end
 				ADDI: begin
 					write_reg_file <= 1; // Write to register
@@ -84,7 +87,7 @@ module control_fsm (
 					result_mux_select <= 1; // Use ALU result
 					
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				SUBI: begin
 					write_reg_file <= 1; // Write to register
@@ -100,7 +103,7 @@ module control_fsm (
 					result_mux_select <= 1; // Use ALU result
 					
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				MOV: begin
 					write_reg_file <= 1; // Write to register
@@ -117,7 +120,7 @@ module control_fsm (
 					result_mux_select <= 1; // Use ALU result
 					
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				SR0: begin
 					write_reg_file <= 1; // Write to register
@@ -132,7 +135,7 @@ module control_fsm (
 					result_mux_select <= 1; // Use ALU result
 				
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				SRH0: begin
 					write_reg_file <= 1; // Write to register
@@ -148,7 +151,7 @@ module control_fsm (
 					result_mux_select <= 1; // Use ALU result
 				
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				CLR: begin
 					write_reg_file <= 1; // Write to register
@@ -157,7 +160,7 @@ module control_fsm (
 					result_mux_select <= 0; // Result is zero
 				
 					increment_pc <= 1;
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				BR: begin
 					op1_mux_select <= 2'd0; // Select PC
@@ -170,7 +173,8 @@ module control_fsm (
 					alu_set_high <= 0;
 					
 					increment_pc <= 0;
-					next_state_logic <= FETCH;
+					commit_branch <= 1; // Save the new PC
+					state <= FETCH;
 				end
 				BRZ: begin
 					if (register0_is_zero) begin // Same as BR
@@ -184,22 +188,24 @@ module control_fsm (
 						alu_set_high <= 0;
 						
 						increment_pc <= 0;
+						commit_branch <= 1; // Save the new PC
 					end else begin
 						increment_pc <= 1;
 					end
-					next_state_logic <= FETCH;
+					state <= FETCH;
 				end
 				MOVR: begin
 					load_temp_register <= 1;
 					increment_temp_register <= 0;
 					decrement_temp_register <= 0;
-					next_state_logic <= MOVR_STAGE2;
+					state <= MOVR_STAGE2;
 					increment_pc <= 0;
 				end
 				MOVR_STAGE2: begin
+					load_temp_register <= 0;
 					if (temp_is_zero) begin
 						increment_pc <= 1;
-						next_state_logic <= FETCH;
+						state <= FETCH;
 					end else begin
 						increment_pc <= 0;
 						if (temp_is_positive) begin
@@ -233,29 +239,30 @@ module control_fsm (
 						end
 						
 						start_delay_counter <= 1;
-						next_state_logic <= MOVR_DELAY;				
+						state <= MOVR_DELAY;				
 					end
 				end
 				MOVR_DELAY: begin
 					increment_pc <= 0;
 					if (delay_done) begin
 						enable_delay_counter <= 1;
-						next_state_logic <= MOVR_STAGE2; // Go back to MOVR_STAGE2 when done
+						state <= MOVR_STAGE2; // Go back to MOVR_STAGE2 when done
 					end else begin
-						next_state_logic <= MOVR_DELAY; // Loop if delay is not done
+						state <= MOVR_DELAY; // Loop if delay is not done
 					end
 				end
 				MOVRHS: begin
 					load_temp_register <= 1;
 					increment_temp_register <= 0;
 					decrement_temp_register <= 0;
-					next_state_logic <= MOVRHS_STAGE2;
+					state <= MOVRHS_STAGE2;
 					increment_pc <= 0;
 				end
 				MOVRHS_STAGE2: begin
+					load_temp_register <= 0;
 					if (temp_is_zero) begin
 						increment_pc <= 1;
-						next_state_logic <= FETCH;
+						state <= FETCH;
 					end else begin
 						increment_pc <= 0;
 						if (temp_is_positive) begin
@@ -289,36 +296,38 @@ module control_fsm (
 						end
 						
 						start_delay_counter <= 1;
-						next_state_logic <= MOVRHS_DELAY;				
+						state <= MOVRHS_DELAY;				
 					end
 				end
 				MOVRHS_DELAY: begin
 					increment_pc <= 0;
 					if (delay_done) begin
 						enable_delay_counter <= 1;
-						next_state_logic <= MOVRHS_STAGE2; // Go back to MOVR_STAGE2 when done
+						state <= MOVRHS_STAGE2; // Go back to MOVR_STAGE2 when done
 					end else begin
-						next_state_logic <= MOVRHS_DELAY; // Loop if delay is not done
+						state <= MOVRHS_DELAY; // Loop if delay is not done
 					end
 				end
 				PAUSE: begin
 					increment_pc <= 0;
 					start_delay_counter <= 1;
-					next_state_logic <= PAUSE_DELAY;
+					state <= PAUSE_DELAY;
 				end
 				PAUSE_DELAY: begin
 					if (delay_done) begin
 						enable_delay_counter <= 1;
 						increment_pc <= 1;
-						next_state_logic <= FETCH;
+						state <= FETCH;
 					end else begin
 						increment_pc <= 0;
-						next_state_logic <= PAUSE_DELAY; // Loop if delay is not done
+						state <= PAUSE_DELAY; // Loop if delay is not done
 					end
 				end
 			endcase
-			
-			state = next_state_logic;
+		end else begin
+			execute_stage = execute_stage - 1;
+			increment_pc <= 0;
+			commit_branch <= 0;
 		end
 	end
 endmodule

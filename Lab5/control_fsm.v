@@ -94,6 +94,7 @@ module control_fsm (
 					
 					op1_mux_select <= 2'd1; // Register
 					op2_mux_select <= 2'd1; // OP2 = immediate
+					
 					if (state == ADDI) begin
 						alu_add_sub <= 0; // Add
 						alu_set_low <= 0;

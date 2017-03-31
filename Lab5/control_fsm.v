@@ -73,32 +73,22 @@ module control_fsm (
 					if (pause)
 						state <= PAUSE;
 				end
-				ADDI: begin
+				ADDI, SUBI: begin
 					write_reg_file <= 1; // Write to register
 					select_write_address <= 2'd1; // Write to first register
 					select_immediate <= 2'd0; // 3-bit immediate value
 					
 					op1_mux_select <= 2'd1;
-					op2_mux_select <= 2'd1;
-					alu_add_sub <= 0; // Add
-					alu_set_low <= 0;
-					alu_set_high <= 0;
-					
-					result_mux_select <= 1; // Use ALU result
-					
-					increment_pc <= 1;
-					state <= FETCH;
-				end
-				SUBI: begin
-					write_reg_file <= 1; // Write to register
-					select_write_address <= 2'd1; // Write to first register
-					select_immediate <= 2'd0; // 3-bit immediate value
-					
-					op1_mux_select <= 2'd1; 
 					op2_mux_select <= 2'd1; // OP2 = immediate
-					alu_add_sub <= 1; // Change ALU to subtract
-					alu_set_low <= 0;
-					alu_set_high <= 0;
+					if (state == ADDI) begin
+						alu_add_sub <= 0; // Add
+						alu_set_low <= 0;
+						alu_set_high <= 0;
+					end else if (state == SUBI) begin
+						alu_add_sub <= 1; // Subtract
+						alu_set_low <= 0;
+						alu_set_high <= 0;
+					end
 					
 					result_mux_select <= 1; // Use ALU result
 					

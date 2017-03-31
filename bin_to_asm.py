@@ -1,7 +1,6 @@
 from bitstring import Bits
 
-#code = "01100000	01001010	01111100	01000011	11000100	00111000	11001000	10011001"
-code = "01100010	00000110	10011111"
+code = raw_input("Tab seperated binary:").lower()
 instr = code.split("\t")
 
 addr = 0
